@@ -13,8 +13,7 @@ def _ensure_storage():
 	if not TRADES_CSV.exists():
 		TRADES_CSV.write_text("timestamp,type,price_usd,amount_usd,btc_amount,notes\n", encoding="utf-8")
 	if not PORTFOLIO_JSON.exists():
-		PORTFOLIO_JSON.write_text(json.dumps({"cash_usd": 0.0, "btc": 0.0}, indent=2), encoding="utf-8")
-
+		PORTFOLIO_JSON.write_text(json.dumps({"cash_usd": 0.0, "btc": 0.0, "initial_cash": 0.0}, indent=2), encoding="utf-8")
 
 
 def _read_portfolio():
@@ -35,6 +34,7 @@ def set_initial_cash(budget_usd):
 	# Initialize only if portfolio is fresh
 	if current_cash == 0.0 and current_btc == 0.0:
 		state["cash_usd"] = float(budget_usd)
+		state["initial_cash"] = float(budget_usd)  # Track initial cash for risk calculations
 		_write_portfolio(state)
 
 

@@ -7,6 +7,7 @@ from src.data.price_data import fetch_bitcoin_data
 from src.ml.forecasting import forecast_next
 from src.ml.threshold_adapter import adapt_thresholds, write_overrides
 from src.main import run_once
+from src.notify.email_report import send_weekly_report
 
 
 sched = BlockingScheduler()
@@ -32,6 +33,11 @@ def update_overrides_job():
 @sched.scheduled_job("interval", minutes=30, id="trade_loop")
 def trade_loop_job():
 	run_once()
+
+
+@sched.scheduled_job("cron", day_of_week="mon", hour=9, id="weekly_report")
+def weekly_report_job():
+	send_weekly_report()
 
 
 def main():

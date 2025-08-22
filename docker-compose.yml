@@ -1,0 +1,37 @@
+services:
+  bitcoin-trading-agent:
+    build: .
+    container_name: bitcoin-trading-agent
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=development
+    env_file:
+      - .env
+    volumes:
+      # Mount data directory for persistence
+      - ./data:/app/data
+      # Mount logs if needed
+      - ./logs:/app/logs
+    networks:
+      - trading-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add Redis for more advanced job queuing
+  # redis:
+  #   image: redis:alpine
+  #   container_name: trading-redis
+  #   restart: unless-stopped
+  #   networks:
+  #     - trading-network
+
+networks:
+  trading-network:
+    driver: bridge
+
+volumes:
+  trading-data:
