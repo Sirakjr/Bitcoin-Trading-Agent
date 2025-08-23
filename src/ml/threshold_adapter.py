@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-RUNTIME_OVERRIDES = Path("src/ml/runtime_overrides.json")
+RUNTIME_OVERRIDES = Path("data/runtime_overrides.json")
 
 
 def _clamp(value, lo, hi):
